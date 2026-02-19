@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 
 public abstract class AbstractSQLPatternCheck extends PythonSubscriptionCheck {
 
-    private static final Map<String, Collection<Integer>> linesWithIssuesByFile = new HashMap<>();
+    private final Map<String, Collection<Integer>> linesWithIssuesByFile = new HashMap<>();
 
     protected abstract String getMessageRule();
     
