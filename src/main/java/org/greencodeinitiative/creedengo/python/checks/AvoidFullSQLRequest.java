@@ -18,77 +18,26 @@
 package org.greencodeinitiative.creedengo.python.checks;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.python.api.PythonSubscriptionCheck;
-import org.sonar.plugins.python.api.SubscriptionContext;
-import org.sonar.plugins.python.api.tree.StringElement;
-import org.sonar.plugins.python.api.tree.StringLiteral;
-import org.sonar.plugins.python.api.tree.Tree;
 import org.sonarsource.analyzer.commons.annotations.DeprecatedRuleKey;
 
-//import org.sonar.api.utils.log.Logger;
-//import org.sonar.api.utils.log.Loggers;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 @Rule(key = "GCI74")
 @DeprecatedRuleKey(repositoryKey = "ecocode-python", ruleKey = "EC74")
 @DeprecatedRuleKey(repositoryKey = "gci-python", ruleKey = "S74")
-public class AvoidFullSQLRequest extends PythonSubscriptionCheck {
+public class AvoidFullSQLRequest extends AbstractSQLPatternCheck {
 
-//    private static final Logger LOGGER = Loggers.get(AvoidFullSQLRequest.class);
-
-    protected static final String MESSAGE_RULE = "Don't use the query SELECT * FROM";
+    private static final String MESSAGE_RULE = "Don't use the query SELECT * FROM";
 
     private static final Pattern PATTERN = Pattern.compile("(?i).*select.*\\*.*from.*");
 
-    private static final Map<String, Collection<Integer>> linesWithIssuesByFile = new HashMap<>();
+    @Override
+    protected String getMessageRule() {
+        return MESSAGE_RULE;
+    }
 
     @Override
-    public void initialize(Context context) {
-        context.registerSyntaxNodeConsumer(Tree.Kind.STRING_LITERAL, this::visitNodeString);
-    }
-
-    public void visitNodeString(SubscriptionContext ctx) {
-        StringLiteral stringLiteral = (StringLiteral) ctx.syntaxNode();
-        stringLiteral.stringElements().forEach(stringElement -> checkIssue(stringElement, ctx));
-    }
-
-    public void checkIssue(StringElement stringElement, SubscriptionContext ctx) {
-//        LOGGER.info("--- DDC --- checkIssue - debut");
-        if (lineAlreadyHasThisIssue(stringElement, ctx)) return;
-
-//        LOGGER.info("-- DDC -- stringElement.value() = " + stringElement.value());
-
-        if (PATTERN.matcher(stringElement.value()).matches()) {
-            report(stringElement, ctx);
-        }
-
-//        LOGGER.info("--- DDC --- checkIssue - fin");
-    }
-
-    private void report(StringElement stringElement, SubscriptionContext ctx) {
-        if (stringElement.firstToken() != null) {
-            final String classname = ctx.pythonFile().fileName();
-            final int line = stringElement.firstToken().line();
-            linesWithIssuesByFile.computeIfAbsent(classname, k -> new ArrayList<>());
-            linesWithIssuesByFile.get(classname).add(line);
-        }
-        ctx.addIssue(stringElement, MESSAGE_RULE);
-    }
-
-    private boolean lineAlreadyHasThisIssue(StringElement stringElement, SubscriptionContext ctx) {
-        if (stringElement.firstToken() != null) {
-            final String filename = ctx.pythonFile().fileName();
-            final int line = stringElement.firstToken().line();
-
-            return linesWithIssuesByFile.containsKey(filename)
-                    && linesWithIssuesByFile.get(filename).contains(line);
-        }
-
-        return false;
+    protected Pattern getPattern() {
+        return PATTERN;
     }
 }
