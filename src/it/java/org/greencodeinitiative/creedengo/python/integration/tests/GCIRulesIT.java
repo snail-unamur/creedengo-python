@@ -594,4 +594,17 @@ class GCIRulesIT extends GCIRulesBase {
 
     }
 
+    @Test
+    void testGCI82() {
+
+        String filePath = "src/makeVariableConstantCheck.py";
+        String ruleId = "creedengo-python:GCI82";
+        String ruleMsg = "Make this variable a constant by renaming it to uppercase";
+        int[] startLines = new int[]{1, 11};
+        int[] endLines = new int[]{1, 11};
+
+        checkIssuesForFile(filePath, ruleId, ruleMsg, startLines, endLines, SEVERITY_INFO, TYPE, EFFORT_10MIN);
+
+    }
+
 }
