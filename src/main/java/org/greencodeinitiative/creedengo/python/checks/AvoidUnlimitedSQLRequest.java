@@ -25,9 +25,9 @@ import java.util.regex.Pattern;
 @Rule(key = "GCI24")
 public class AvoidUnlimitedSQLRequest extends AbstractSQLPatternCheck {
 
-    private static final String MESSAGE_RULE = "Don't use the query SELECT _ FROM _ WHERE _ without a limit";
+    private static final String MESSAGE_RULE = "Don't use a SELECT _ FROM _ query without a limit";
 
-    private static final Pattern PATTERN = Pattern.compile("(?i).*select.*from(?!.*\\blimit\\b).*");
+    private static final Pattern PATTERN = Pattern.compile("(?i).*\\bselect\\b.*\\bfrom\\b(?!.*\\blimit\\b).*");
 
     @Override
     protected String getMessageRule() {

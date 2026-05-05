@@ -29,7 +29,7 @@ public class AvoidFullSQLRequest extends AbstractSQLPatternCheck {
 
     private static final String MESSAGE_RULE = "Don't use the query SELECT * FROM";
 
-    private static final Pattern PATTERN = Pattern.compile("(?i).*select.*\\*.*from.*");
+    private static final Pattern PATTERN = Pattern.compile("(?i).*\\bselect\\b.*\\*.*\\bfrom\\b.*");
 
     @Override
     protected String getMessageRule() {

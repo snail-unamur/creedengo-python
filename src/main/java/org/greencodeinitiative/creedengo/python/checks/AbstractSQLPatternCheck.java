@@ -24,15 +24,16 @@ import org.sonar.plugins.python.api.tree.StringElement;
 import org.sonar.plugins.python.api.tree.StringLiteral;
 import org.sonar.plugins.python.api.tree.Tree;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public abstract class AbstractSQLPatternCheck extends PythonSubscriptionCheck {
 
-    private final Map<String, Collection<Integer>> linesWithIssuesByFile = new HashMap<>();
+    private final Map<String, Set<Integer>> linesWithIssuesByFile = new HashMap<>();
 
     protected abstract String getMessageRule();
     
@@ -60,7 +61,7 @@ public abstract class AbstractSQLPatternCheck extends PythonSubscriptionCheck {
         if (stringElement.firstToken() != null) {
             final String classname = ctx.pythonFile().fileName();
             final int line = stringElement.firstToken().line();
-            linesWithIssuesByFile.computeIfAbsent(classname, k -> new ArrayList<>()).add(line);
+            linesWithIssuesByFile.computeIfAbsent(classname, k -> new HashSet<>()).add(line);
         }
         ctx.addIssue(stringElement, getMessageRule());
     }
@@ -68,6 +69,6 @@ public abstract class AbstractSQLPatternCheck extends PythonSubscriptionCheck {
     private boolean lineAlreadyHasThisIssue(StringElement stringElement, SubscriptionContext ctx) {
         final String classname = ctx.pythonFile().fileName();
         final int line = stringElement.firstToken() != null ? stringElement.firstToken().line() : -1;
-        return linesWithIssuesByFile.getOrDefault(classname, new ArrayList<>()).contains(line);
+        return linesWithIssuesByFile.getOrDefault(classname, Collections.emptySet()).contains(line);
     }
 }

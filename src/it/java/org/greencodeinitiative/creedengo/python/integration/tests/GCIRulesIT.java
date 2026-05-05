@@ -62,7 +62,7 @@ class GCIRulesIT extends GCIRulesBase {
 
         String filePath = "src/avoidUnlimitedSQLRequest.py";
         String ruleId = "creedengo-python:GCI24";
-        String ruleMsg = "Don't use the query SELECT _ FROM _ WHERE _ without a limit";
+        String ruleMsg = "Don't use a SELECT _ FROM _ query without a limit";
         int[] startLines = new int[]{4, 7};
         int[] endLines = new int[]{4, 7};
 
