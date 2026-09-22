@@ -77,7 +77,7 @@
 
         <!-- version explicitly set for security raised by github -->
         <!-- to delete when sonarpython will provide this version at minimum -->
-        <jackson-core.version>2.21.3</jackson-core.version>
+        <jackson-core.version>2.21.4</jackson-core.version>
 
         <!-- temporary version waiting for a real automatic release in creedengo repository -->
         <creedengo-rules-specifications.version>3.2.0</creedengo-rules-specifications.version>
@@ -136,7 +136,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>4.34.1</version>
+            <version>4.35.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -190,7 +190,7 @@
         <dependency>
             <groupId>org.green-code-initiative</groupId>
             <artifactId>creedengo-integration-test</artifactId>
-            <version>0.4.0</version>
+            <version>0.6.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -228,7 +228,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.5</version>
+                <version>3.5.6</version>
                 <configuration>
                     <skip>${skip.unit.tests}</skip>
                     <systemPropertyVariables>
@@ -254,7 +254,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>0.8.15</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -363,7 +363,7 @@
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <!-- max version without pb for JDK 17 / recent versions have a NPE when deploying in docker -->
-                <version>4.1</version>
+                <version>5.1.2</version>
                 <configuration>
                     <properties>
                         <owner>Green Code Initiative</owner>
@@ -431,7 +431,7 @@
                 <!-- Execute integration tests -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.5.6</version>
                 <executions>
                     <execution>
                         <goals>
