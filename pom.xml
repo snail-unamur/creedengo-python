@@ -56,6 +56,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- Custom property to skip only unit tests (not integration tests) -->
+        <skip.unit.tests>false</skip.unit.tests>
+
         <sonar.organization>green-code-initiative</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
@@ -63,21 +66,21 @@
         <sonarqube-plugin-api-min.version>9.9.0.65466</sonarqube-plugin-api-min.version>
 
         <!-- Version of the SonarQube APIs used by `creedengo-java-plugin` -->
-        <sonar.plugin.api.version>13.5.0.4319</sonar.plugin.api.version>
+        <sonar.plugin.api.version>13.6.0.4371</sonar.plugin.api.version>
 
-        <sonar-analyzer-commons.version>2.21.0.4626</sonar-analyzer-commons.version>
+        <sonar-analyzer-commons.version>2.22.0.4796</sonar-analyzer-commons.version>
 
         <sonar-packaging.version>1.25.1.3002</sonar-packaging.version>
 
         <!-- last version that all is OK -->
-        <sonarpython.version>5.21.0.32726</sonarpython.version>
+        <sonarpython.version>5.22.0.33216</sonarpython.version>
 
         <!-- version explicitly set for security raised by github -->
         <!-- to delete when sonarpython will provide this version at minimum -->
-        <jackson-core.version>2.21.2</jackson-core.version>
+        <jackson-core.version>2.21.4</jackson-core.version>
 
         <!-- temporary version waiting for a real automatic release in creedengo repository -->
-        <creedengo-rules-specifications.version>3.0.0</creedengo-rules-specifications.version>
+        <creedengo-rules-specifications.version>3.2.0</creedengo-rules-specifications.version>
 
         <!-- URL of the Maven repository where sonarqube will be downloaded -->
         <test-it.orchestrator.artifactory.url>https://repo1.maven.org/maven2</test-it.orchestrator.artifactory.url>
@@ -133,7 +136,7 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>4.34.1</version>
+            <version>4.35.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -175,7 +178,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.17</version>
+            <version>2.0.18</version>
             <!-- To keep with this scope otherwise logging system will be not ok on custom plugins -->
             <scope>provided</scope>
         </dependency>
@@ -187,7 +190,7 @@
         <dependency>
             <groupId>org.green-code-initiative</groupId>
             <artifactId>creedengo-integration-test</artifactId>
-            <version>0.3.0</version>
+            <version>0.6.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -225,7 +228,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.5.6</version>
+                <configuration>
+                    <skip>${skip.unit.tests}</skip>
+                    <systemPropertyVariables>
+                        <testfiles.path>src/it/test-projects/creedengo-python-plugin-test-project/src</testfiles.path>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -245,7 +254,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
+                <version>0.8.15</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -354,7 +363,7 @@
                 <groupId>com.mycila</groupId>
                 <artifactId>license-maven-plugin</artifactId>
                 <!-- max version without pb for JDK 17 / recent versions have a NPE when deploying in docker -->
-                <version>4.1</version>
+                <version>5.1.2</version>
                 <configuration>
                     <properties>
                         <owner>Green Code Initiative</owner>
@@ -422,7 +431,7 @@
                 <!-- Execute integration tests -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.4</version>
+                <version>3.5.6</version>
                 <executions>
                     <execution>
                         <goals>
