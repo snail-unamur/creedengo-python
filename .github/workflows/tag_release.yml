@@ -30,7 +30,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -50,20 +50,22 @@ jobs:
           echo "release_tag=$RELEASE_TAG" >> $GITHUB_ENV
 
       - name: Checkout tag "${{ env.release_tag }}"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.release_tag }}
 
       - name: Extract release notes
         id: extract-release-notes
-        uses: ffurrer2/extract-release-notes@v1
+        uses: ffurrer2/extract-release-notes@273da39a24fb7db106a35526c8162815faffd31d # v3.1.0
 
       - name: Build project
         env:
           # the plugin maven-release-plugin uses the environment variable VERSIONING_GIT_REF to determine the version to use when building the project.
           # By setting this variable to refs/tags/${{ env.release_tag }}, we are telling the plugin to use the specified tag as the project version.
           VERSIONING_GIT_REF: refs/tags/${{ env.release_tag }}
-        run: mvn -e -B clean package -DskipTests -Drevision=${{ env.release_tag }}
+        # Use the pinned wrapper: runner Maven 3.10 is incompatible with the
+        # current versioning extension (TECH_DEBT.md, TD-1).
+        run: ./mvnw -e -B clean package -DskipTests -Drevision=${{ env.release_tag }}
 
       - name: Resolve JAR filename
         id: resolve_jar
@@ -77,7 +79,7 @@ jobs:
           echo "jar_path=$JAR_FILE" >> $GITHUB_ENV
 
       - name: Create release and upload asset
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
         with:
           tag_name: ${{ env.release_tag }}
           name: Release ${{ env.release_tag }}
